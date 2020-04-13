@@ -1,15 +1,61 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Notas
-  </h1>
-</div>
+
 <div>
-  <form>
-    <div class="row">
+  <form [formGroup]="nota" class="jumbotron" *ngIf="!showEditar">
+
+    <div class="row text-center">
+      <div class="col-12 p-2"> <h2>Agregando Notas</h2></div>
         <div class="col-6">
-          <input type="text" class="form-control">
-          <button class="btn btn-sm btn-success">Agregar Nota</button>
+          <input type="text" class="form-control" formControlName="data" placeholder="Agrega una nota">
+        </div>
+        <div class="col-4">
+             <select class="custom-select" formControlName="color">
+               <option value=" ">Seleccionar un color de nota (default blanco) </option>
+               <option value="warning">Amarillo</option>
+               <option value="primary">Azul</option>
+               <option value="danger">Rojo</option>
+               <option value="dark">Negro</option>
+             </select>
+        </div>
+        <div class="col-2"> 
+            <div class="btn btn-sm btn-success" (click)="agregar()">Agregar Nota</div>
+        </div>
+        <div class="text-danger" *ngIf="intento && !nota.valid">
+          *Faltan datos
+        </div>
+    </div>
+  </form>
+  <form [formGroup]="notaEdit" class="jumbotron" *ngIf="showEditar">
+    <div class="row text-center">
+      <div class="col-12 p-2">
+        <h2>Editando notas</h2>
+      </div>
+        <div class="col-6">
+          <input type="text" class="form-control" formControlName="data" placeholder="Agrega una nota">
+        </div>
+        <div class="col-4">
+             <select class="custom-select" formControlName="color">
+               <option value=" ">Seleccionar un color de nota (default blanco) </option>
+               <option value="warning">Amarillo</option>
+               <option value="primary">Azul</option>
+               <option value="danger">Rojo</option>
+               <option value="dark">Negro</option>
+             </select>
+        </div>
+        <div class="col-2"> 
+            <div class="btn btn-sm btn-warning" (click)="update()">Actualizar Nota</div>
+        </div>
+        <div class="text-danger" *ngIf="intentoEdit && !notaEdit.valid">
+          *Faltan datos
+        </div>
+    </div>
+  </form>  
+
+
+
+  <div *ngIf="notas.length" class="m-4 text-center"> 
+      <div class="m-2 row">
+        <div class="col-8">
+          Información de nota
         </div>
         <div class="col-2">
           Editar
@@ -17,9 +63,23 @@
         <div class="col-2">
           Eliminar
         </div>
-        <div class="col-2">
-          Color
+      </div>
+      <div class="card m-2 bg-{{nota.color}} p-3"  *ngFor="let nota of notas; let i = index">
+        <div class="row">
+          <div class="col-8" [ngClass]="{'text-light':nota.color=='dark'}">
+            {{nota.data}}
+          </div>
+          <div class="col-2">
+            <button class="btn btn-sm btn-warning border-dark" (click)="editar(i)">Editar</button>
+          </div>
+          <div class="col-2">
+            <button class="btn btn-sm btn-danger border-dark" (click)="eliminar(i)">Eliminar</button>
+          </div>
         </div>
-    </div>
-  </form>
+     </div>
+</div>
+  <div *ngIf="!notas.length" class="m-4 text-center card">
+      No hay notas por mostrar  
+  </div>
+  
 </div>
